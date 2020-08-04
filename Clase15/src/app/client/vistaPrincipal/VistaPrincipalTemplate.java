@@ -2,16 +2,22 @@ package app.client.vistaPrincipal;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
+import app.services.servicesGraphics.GraficosAvanzadosService;
 import app.services.servicesGraphics.ObjGraficosService;
+import app.services.servicesGraphics.RecursosService;
 
 public class VistaPrincipalTemplate extends JFrame {
 
     private static final long serialVersionUID = 8914150529633029064L;
     private ObjGraficosService sObjGraficos;
+    private GraficosAvanzadosService sGraficosAvanzados;
+    private RecursosService sRecursos;
     private VistaPrincipalComponent vistaPrincipalComponent;
 
     private JPanel pNavegacion, pBarra, pPrincipal;
+    private JScrollPane psProductos;
 
     public VistaPrincipalTemplate(VistaPrincipalComponent vistaPrincipalComponent) {
         super("Vista Principal");
@@ -19,6 +25,8 @@ public class VistaPrincipalTemplate extends JFrame {
         this.vistaPrincipalComponent = vistaPrincipalComponent;
         this.vistaPrincipalComponent.getClass();
         sObjGraficos = ObjGraficosService.getService();
+        sRecursos = RecursosService.getService();
+        sGraficosAvanzados = GraficosAvanzadosService.getService();
 
         this.crearJPanels();
 
@@ -39,6 +47,15 @@ public class VistaPrincipalTemplate extends JFrame {
 
         pPrincipal = sObjGraficos.construirJPanel(250, 50, 850, 600, null, null);
         this.add(pPrincipal);
+    }
+
+    public void crearContenidoProductos(JPanel pProductos){
+        this.psProductos = sObjGraficos.construirPanelBarra(pProductos, 0, 0, 850, 600, null, null);
+        this.psProductos.getVerticalScrollBar().setUI(sGraficosAvanzados.devolverScrollPersonalizado(
+            7, 10, sRecursos.getColorGrisClaro(), sRecursos.getColorAzul(), sRecursos.getColorAzulOscuro())
+        );
+        this.pPrincipal.add(psProductos);
+        this.psProductos.getVerticalScrollBar().setValue(2);
     }
 
     public JPanel getPNavegacion() {

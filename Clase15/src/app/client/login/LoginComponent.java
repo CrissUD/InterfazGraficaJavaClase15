@@ -187,7 +187,7 @@ public class LoginComponent implements ActionListener, MouseListener {
                     );
                 break;
         }
-        loginTemplate.repaint();
+        loginTemplate.repaint(0, 80, 620, 375);
     }
 
     public LoginTemplate getLoginTemplate() {

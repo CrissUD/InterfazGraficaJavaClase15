@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import app.services.servicesGraphics.GraficosAvanzadosService;
 import app.services.servicesGraphics.ObjGraficosService;
 import app.services.servicesGraphics.RecursosService;
 
@@ -33,7 +34,7 @@ public class LoginTemplate extends JFrame {
     private ButtonGroup grupo;
 
     // Declaración objetos Decoradores
-    private ImageIcon iFondo, iSvg, iLogo, iUsuario, iClave, iPunto, iFacebook, iTwitter, iYoutube, iDimAux;
+    private ImageIcon iFondo, iSvg, iLogo, iUsuario, iClave, iPunto, iAbajo, iFacebook, iTwitter, iYoutube, iDimAux;
     private ImageIcon iPunto2, iSvg2, iSvg3;
 
     // Declaración servicios
@@ -81,6 +82,7 @@ public class LoginTemplate extends JFrame {
         iSvg2 = new ImageIcon("Clase15/resources/img/imagen2.png");
         iSvg3 = new ImageIcon("Clase15/resources/img/imagen3.png");
         iPunto2 = new ImageIcon("Clase15/resources/img/punto2.png");
+        iAbajo = new ImageIcon("Clase15/resources/img/abajo.png");
     }
 
     public void crearJPanels(){
@@ -291,7 +293,12 @@ public class LoginTemplate extends JFrame {
     public void crearJComboBoxes(){
         cbTipoUsuario = sObjGraficos.construirJComboBox(
             "Cliente_Cajero_Administrador", (pDerecha.getWidth() - 220) / 2, 210, 220, 30, 
-            Color.WHITE, sRecursos.getColorAzul(), "c"
+            Color.WHITE, Color.WHITE, "c"
+        );
+        cbTipoUsuario.setUI(
+            GraficosAvanzadosService.getService().devolverJComboBoxPersonalizado(
+                sRecursos.getColorAzul(), sRecursos.getColorAzul(), iAbajo, false
+            )
         );
         pDerecha.add(cbTipoUsuario);
     }

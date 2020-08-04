@@ -66,7 +66,7 @@ public class VistaPrincipalComponent {
             case "Productos":
                 if (this.productosComponent == null)
                     this.productosComponent = new ProductosComponent();
-                vistaPrincipalTemplate.getPPrincipal().add(
+                vistaPrincipalTemplate.crearContenidoProductos(
                     productosComponent.getProductosTemplate()
                 );
                 break;

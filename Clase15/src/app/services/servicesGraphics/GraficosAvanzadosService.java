@@ -17,14 +17,19 @@ import java.awt.geom.RoundRectangle2D;
 import java.awt.geom.RectangularShape;
 
 import javax.swing.BorderFactory;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JScrollBar;
 import javax.swing.JTable;
+import javax.swing.ListCellRenderer;
 import javax.swing.SwingConstants;
 import javax.swing.border.AbstractBorder;
 import javax.swing.border.Border;
+import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import javax.swing.table.DefaultTableCellRenderer;
 
@@ -109,6 +114,53 @@ public class GraficosAvanzadosService {
                     g2.fillRoundRect((r.width - grosor) / 2, r.y, grosor, r.height, radio, radio);
                 else
                     g2.fillRoundRect(r.x, (r.height - grosor) / 2, r.width, grosor, radio, radio);
+            }
+        };
+    }
+
+    public BasicComboBoxUI devolverJComboBoxPersonalizado(
+        Color colorBorde, Color colorFondo, ImageIcon imagenBoton, boolean esLineal
+    ){
+        return new BasicComboBoxUI(){
+            @Override
+            protected JButton createArrowButton() {
+                ImageIcon iDimAux = new ImageIcon(imagenBoton.getImage().getScaledInstance(20, 20, Image.SCALE_AREA_AVERAGING));
+                return ObjGraficosService.getService().construirJButton(
+                    null, 0, 0, 0, 0, RecursosService.getService().getCMano(), iDimAux,
+                    null, null, null, RecursosService.getService().getBordeLateralAzul(), "c", false
+                );
+            }
+
+            @Override
+            public void paintCurrentValueBackground(Graphics g, Rectangle bounds, boolean hasFocus) {
+                g.setColor(colorBorde);
+                if(esLineal){
+                    g.drawRect(bounds.x, bounds.y, bounds.width, bounds.height - 1);
+                    g.drawRect(bounds.x + 1, bounds.y + 1, bounds.width - 2, bounds.height - 3);
+                }
+                else
+                    g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
+
+            }
+
+            @Override
+            protected ListCellRenderer<Object> createRenderer() {
+                return new DefaultListCellRenderer(){
+                    private static final long serialVersionUID = 1L;
+
+                    @Override
+                    public Component getListCellRendererComponent(
+                        JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus
+                    ) {
+                        super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                        this.setHorizontalAlignment(SwingConstants.CENTER);
+                        list.setSelectionBackground(colorFondo);
+                        list.setSelectionForeground(Color.WHITE);
+                        if(!isSelected)
+                            this.setForeground(colorFondo);
+                        return this;
+                    }
+                };
             }
         };
     }

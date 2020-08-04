@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.awt.FontFormatException;
 
+import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -55,6 +56,8 @@ public class RecursosService {
         bordeDifuminado = sGraficosAvanzados.devolverBordeDifuminado(new Color(215, 215, 215), 8);
         iCerrar = new ImageIcon("Clase15/resources/img/cerrar.png");
         iMinimizar = new ImageIcon("Clase15/resources/img/minimizar.png");
+
+        this.personalizarJOptionPane();
     }
 
     public void generarFuentes(){
@@ -66,6 +69,15 @@ public class RecursosService {
         }
     }
     
+
+    public void personalizarJOptionPane(){
+        UIManager.put("OptionPane.background", Color.WHITE);
+        UIManager.put("OptionPane.messageForeground", this.colorAzulOscuro);
+        UIManager.put("Button.background", this.colorAzul);
+        UIManager.put("Button.foreground", Color.WHITE);
+        UIManager.put("Panel.background", Color.WHITE);
+    }
+
     public Color getColorMorado(){
         return colorMorado;
     }

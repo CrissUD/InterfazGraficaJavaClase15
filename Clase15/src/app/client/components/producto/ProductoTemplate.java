@@ -4,14 +4,15 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import app.services.graphicServices.ObjGraficosService;
+import app.services.graphicServices.RecursosService;
+
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.Dimension;
 
-import app.services.servicesGraphics.ObjGraficosService;
-import app.services.servicesGraphics.RecursosService;
 import models.Producto;
 
 public class ProductoTemplate extends JPanel{

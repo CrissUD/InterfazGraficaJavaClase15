@@ -14,9 +14,9 @@ import java.awt.geom.Ellipse2D;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
-import java.awt.event.MouseEvent;
+import app.services.graphicServices.RecursosService;
 
-import app.services.servicesGraphics.RecursosService;
+import java.awt.event.MouseEvent;
 
 public class LienzoTemplate extends Canvas{
     

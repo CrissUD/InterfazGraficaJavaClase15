@@ -1,6 +1,5 @@
 package app.client.components.inicio;
 
-import app.services.servicesLogic.AccionService;
 import models.Accion;
 
 import java.awt.event.ActionEvent;
@@ -8,6 +7,8 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.Timer;
+
+import app.services.LogicServices.AccionService;
 
 public class InicioComponent implements ActionListener {
 

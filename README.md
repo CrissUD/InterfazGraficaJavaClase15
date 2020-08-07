@@ -10,8 +10,8 @@ Curso propuesto por el grupo de trabajo Semana de Ingenio y Diseño (**SID**) de
 
 ## Objetivos
 
-* Reconocer el modo de utilizar el enfoque de posicionamiento a traves de LayoutManager e identificar las ventajas de utilizar este enfoque de posicionamiento.
-* Identificar alguno de los principales tipos de Layout para gestionar el posicionamiento de objetos gráficos.
+* Reconocer el modo de gestionar el posicionamiento y tamaño de objetos gráficos a traves de LayoutManager y mostrar las ventajas de utilizar este enfoque.
+* Identificar alguno de los principales tipos de Layout para gestionar el posicionamiento y tamaño de objetos gráficos.
 * Realizar uso del GridBadLayout dentro de nuestro proyecto y reconocer cada uno de los procesos que intervienen en su construcción.
 * Explicar particularidades en torno al uso de GridBadLayout para entender a detalle como funciona este LayoutManager.
 
@@ -23,9 +23,9 @@ Antes de iniciar con la clase de hoy vamos a realizar una actualización en la c
     <p>Imágenes sobre productos.</p>
 </div>
 
-***Nota: Estas imágenes fueron tomadas de la página [ed.team](https://ed.team/) son ellos los creadores y dueños de estas imágenes, aquí daremos uso a estas imágenes con motivos académicos. Por favor utilizar estas imágenes con responsabilidad en caso de ser descargadas.***
+***Nota: Estas imágenes fueron tomadas de la página [ed.team](https://ed.team/) son ellos los creadores y dueños de estas imágenes, aquí daremos uso a estas imágenes con motivos académicos basándonos un poco en el diseño de su página web. Por favor utilizar estas imágenes con responsabilidad en caso de ser descargadas.***
 
-Vamos a crear algunos nuevos objetos decoradores dentro de nuestro servicio **RecursosService** ya que vamos a necesitar para la construcción de nuestra interfaz en esta sesión, primero vamos a crear dos nuevos colores de tipo azul:
+Vamos a crear algunos nuevos objetos decoradores dentro de nuestro servicio **RecursosService**, que vamos a necesitar para la construcción de la interfaz en esta sesión, primero vamos a crear dos nuevos colores de tipo azul:
 * **Declaración:**
 ```javascript
 // Dentro del servicio RecursosService
@@ -75,9 +75,9 @@ Recordando un poco nuestro recorrido, en la clase anterior vimos el funcionamien
     <p>Uso del servicio Gráficos Avanzados para dar un borde circular y bordes difuminados</p>
 </div>
 
-# Posicionamiento de elementos con LayoutManager
+# Posicionamiento y tamaño de elementos con LayoutManager
 
-En esta sesión se explicara el uso de **LayoutManager** para el posicionamiento de nuestros objetos gráficos en la interfaz y para una explicación completa veremos los siguientes items:
+En esta sesión se explicara el uso de **LayoutManager** para el posicionamiento y tamaño de objetos gráficos en la interfaz y para una explicación completa veremos los siguientes items:
 * **Definición de LayoutManager**.
 * **Tipos de LayoutManager**.
 * **Preparación de proyecto para uso de GridBadLayout**.
@@ -85,15 +85,15 @@ En esta sesión se explicara el uso de **LayoutManager** para el posicionamiento
 
 # Definición de LayoutManager
 
-Los **LayoutManager** son objetos en Java encargados de posiciónar los objetos gráficos dentro de nuestras interfaces gráficas de forma automática y bajo ciertos criterios existen varios tipos con distintas configuraciones pero todos ofrecen el servicio de posicionar elementos en pantalla y darles un tamaño adecuado. 
+Los **LayoutManager** son objetos en Java encargados de posiciónar los objetos gráficos dentro de nuestras interfaces gráficas además de darles un tamaño de forma automática, para esto se deben tener en cuenta ciertos criterios, existen por ejemplo, varios tipos de **LayoutManagers** con distintas configuraciones pero en general, todos ofrecen el servicio de posicionar y dar tamaño a los elementos en pantalla de forma adecuada. 
 
-Hasta el momento no hemos utilizado ningún **LayoutManager** y esto es por que son complejos de utilizar y aprender, pero el tiempo que nos ahorramos aprendiendo el uso de estos **Layouts** lo gastamos en el calculo de cada posición y tamaño de cada objeto gráfico en pantalla y muchas veces haciendo multiples pruebas para comprobar que nuestros elementos en pantalla están como queremos. Aunque esto trae cierta ventaja ya que nosotros somos los que controlamos este aspecto y podemos posicionar nuestros elementos como queremos si es verdad que el tiempo invertido para esto en cada objeto es grande. 
+Hasta el momento no hemos utilizado ningún **LayoutManager** y esto es por que son complejos de utilizar y aprender, pero el tiempo que nos ahorramos aprendiendo el uso de estos **Layouts** lo gastamos en el calculo de cada posición y tamaño de cada objeto gráfico en pantalla y muchas veces haciendo multiples pruebas para comprobar que nuestros elementos en pantalla están como queremos. Aunque esto trae cierta ventaja ya que nosotros somos los que controlamos este aspecto y podemos posicionar nuestros elementos como queremos, si es verdad que el tiempo invertido para la gestión de posicionamiento y tamaña en cada objeto se vuelve bastante largo. 
 
-El uso de **LayoutManager** ademas de ahorrarnos tiempos de cálculos para posicionar nuestros elementos tiene un serie de ventajas que valen la pena recalcar.
+El uso de **LayoutManager** ademas de ahorrarnos tiempos de cálculos para posicionar nuestros elementos y darles un tamaño adecuado, tiene un serie de ventajas que valen la pena recalcar.
 
 ## Reactividad
 
-Esta es quizás la ventaja que mas resalta en el uso de **LayoutManager** a comparación del uso de **posicionamiento por pixeles**, cuando usamos el segundo enfoque estamos dando un **tamaño y posición fija** a nuestros elementos y esto quiere decir que si la ventana se va a cambiar de tamaño en algún punto estos objetos no van a reaccionar al cambio de la pantalla y se quedaran estáticos con la posición y tamaño dado. Por el contrario cuando utilizamos **LayoutManager** nuestros objetos gráficos van a tener un **tamaño y posición dinámica** que va a depender del tamaño de la ventana y se va a reactivar una ves este cambie para que el tamaño y posición de este objeto sea proporcional al nuevo tamaño. 
+Esta es quizás la ventaja que mas resalta en el uso de **LayoutManager** a comparación del uso de **posicionamiento por pixeles**, cuando usamos el segundo enfoque estamos dando un **tamaño y posición fija** a nuestros elementos y esto quiere decir que si la ventana se va a cambiar de tamaño en algún punto estos objetos no van a reaccionar al cambio de la pantalla y se quedaran estáticos con la posición y tamaño dado. Por el contrario cuando utilizamos **LayoutManager** nuestros objetos gráficos van a tener un **tamaño y posición dinámica** que va a depender del tamaño de la ventana y se va a reactivar cada vez que la ventana cambie este aspecto, avisando internamente que el tamaño y posición del objeto gráfico va a cambiar para que sea proporcional al nuevo tamaño de la ventana. 
 
 <div align='center'>
     <img  src='./gifs/sinLayout.gif'>
@@ -147,7 +147,7 @@ Este **LayoutManager** es el que viene por defecto en la mayoría de objetos enc
 * Los objetos que se ubiquen en los laterales ocuparan siempre todo el alto de la ventana.
 * El objeto ubicado en el centro tratará siempre de expandirse en ambas dimensiones, de esta forma si hay un único elemento central ocupara toda la ventana, de lo contrario se extenderá hasta el limite con sus objetos compañeros.
 
-El **BorderLayout** es ideal para posicionar ventanas ya que tiene una estructura básica de una aplicación de escritorio. Es común que los frames utilicen este **LayoutManager** para dar la estructura principal de la aplicación y cada elemento en especifico use sus propios layouts.
+El **BorderLayout** es ideal para posicionar elementos generales en las ventanas ya que tiene una estructura básica de una aplicación de escritorio. Es común que los JFrames utilicen este **LayoutManager** para dar la estructura principal de la aplicación y cada elemento en especifico use sus propios layouts.
 
 A continuación veremos un ejemplo sencillo:
 
@@ -164,15 +164,17 @@ A continuación veremos un ejemplo sencillo:
 Podemos ver algunas particularidades:
 * **Construcción Layout**: Basta con ejemplificarlos y agregarlo mediante el método **setLayout**, en este caso al ser una ventana este paso esta de mas ya que por defecto tiene este layout, pero se coloco para mostrar su construcción.
 * **Dirección de Objetos Gráficos**: Para indicarle a nuestra aplicación debemos indicar la dirección del objeto una vez se agrega a la ventana mediante el objeto **BorderLayout** y sus opciones **North, South, West, East, Center**.
-* **Tamaño Objetos:** Por defecto el compilador ira agrandando o reduciendo la ventana a medida que cada panel ubicado va agregando objetos, en este caso solo se crearon los paneles asi que para representar que ocuparan un tamaño usamos el método **setPreferredSize** pero esto no será necesario una vez tenga elementos internos.
+* **Tamaño de objetos gráficos:** Podemos notar que cuando construimos los paneles, le pasamos como argumentos 0, ya que nosotros no nos encargaremos de dar la posición o tamaño como lo hacíamos antes, ahora es el LayoutManager.
+* **Tamaño de Paneles:** Por defecto el compilador ira agrandando o reduciendo la ventana a medida que cada panel ubicado va agregando objetos, en este caso solo se crearon paneles vacíos, asi que para representar que ocuparan un tamaño usamos el método **setPreferredSize**, pero esto no será necesario una vez cada panel tenga elementos internos.
 * **Tamaño de la ventana**: No es necesario indicarle un tamaño fijo a la ventana, mediante el método **pack()** la ventana encontrará el menor tamaño para que los objetos gráficos quepan en ella.
 
-Como desventaja esta el hecho de imponer una sola estructura para crear aplicaciónes, si queremos dar otra forma a nuestra aplicación no será posible.
+Como desventaja esta el hecho de que este **LayoutManager** impone una sola estructura para crear aplicaciónes, si queremos dar otra forma a nuestra aplicación no será posible.
 
 ## FlowLayout
 
 Este **LayoutManager** coloca los objetos gráficos de forma horizontal, creando una fila dentro de la ventana. De esta forma el layout posicióna los elementos de igual forma a lo largo del eje X. 
-Ademas trae ciertas ventajas, por ejemplo si la ventana tiene un ancho muy grande y sobra espacio tratara siempre de ubicar los elementos de forma horizontal y centrada. Por otro lado si la ventana no ocupa el ancho suficiente para colocar todos los elementos el **LayoutManager** automáticamente crea una fila debajo para poder ubicar los objetos gráficos sobrantes y siempre tratando de centrar los elementos.
+Ademas trae ciertas características, por ejemplo si la ventana tiene un ancho muy grande y sobra espacio tratara siempre de ubicar los elementos de forma centrada. Por otro lado si la ventana no ocupa el ancho suficiente para colocar todos los elementos el **LayoutManager** automáticamente crea una fila debajo para poder ubicar los objetos gráficos sobrantes y siempre tratando de centrar estos elementos.
+
 Es ideal para usarse por ejemplo en barras de herramientas, barras de títulos, menus horizontales etc.
 
 A continuación se muestra un ejemplo simple de como usar este **FlowLayout**:
@@ -186,16 +188,16 @@ A continuación se muestra un ejemplo simple de como usar este **FlowLayout**:
     <p>Resultado del código</p>
 </div>
 
-En este caso se creo una barra de titulo o **Header** bastante sencillo a partir del uso de **FlowLayout**. Noten que nosotros al crear nuestros objetos gráficos no estamos proporcionando ningún tamaño ni posición ya que de eso se va a encargar automáticamente el **LayoutManager** el resto del proceso es igual al que hemos manejado.
+En este caso se creo una barra de titulo o **Header** bastante sencillo a partir del uso de **FlowLayout**. Noten que al crear objetos gráficos no estamos proporcionando ningún tamaño ni posición ya que de eso se va a encargar automáticamente el **LayoutManager** el resto del proceso de construcción es igual al que hemos manejado.
 
-Aunque es un Layout ideal para realizar este tipo de cosas tiene ciertas desventajas:
+Aunque es un Layout simple e ideal para este tipo de casos, tiene ciertas desventajas:
 * **Posicionamiento Horizontal:** Solo funciona para posicionar de manera horizontal, no podemos controlar la posición de forma vertical.
-* **Espacio entre objetos gráficos:** Este layout por defecto pega todos los componentes y los tratará de centrar, si queremos simular espaciado entre objetos gráficos debemos realizar algunas configuraciones adicionales como usar **bordes vacíos**.
+* **Espacio entre objetos gráficos:** Este layout por defecto junta todos los elementos y los tratará de centrar, si queremos simular espaciado entre objetos gráficos debemos realizar algunas configuraciones adicionales como usar **bordes vacíos**.
 * **Alineación Vertical Automática:** No es posible realizar una alineación vertical entre elementos de forma manual, si un elemento es mas alto que el resto, el **FlowLayout** tratara siempre de centrarlos de forma vertical pero si queremos que alguno de esos este en la parte superior o inferior de la fila no será posible.
 
 ## BoxLayout
 
-Este **LayoutManager** esta creado dentro de la librería **Swing** y cubre la necesidad de poder posicionar elementos de forma vertical, pero al igual que su antecesor si se decea, se puede posicionar elementos de forma horizontal lo cual hace de este **LayoutManager** un objeto mas completo para posicionar elementos.
+Este **LayoutManager** esta creado dentro de la librería **Swing** y cubre la necesidad de poder posicionar elementos de forma vertical, pero al igual que su antecesor si se decea, se puede posicionar elementos de forma horizontal lo cual hace de este **LayoutManager** un objeto mas completo para posicionar elementos. Sin embargo no se puede posicionar sobre las dos dimensiones a la vez, el desarrollador debe elegir sobre cual eje se posicionarán los elementos.
 
 Puede usarse para menus verticales, menus horizontales, combinaciones entre posiciones, barras títulos, barras de herramientas etc.
 
@@ -216,12 +218,11 @@ Del anterior ejemplo se pueden notar varias cosas:
     * **Y_AXIS**: para posicionar elementos de forma Vertical.
     * **LINE_AXIS o PAGE_AXIS**: Le da la responsabilidad a cada objeto gráfico de indicar si se posicionará deforma horizontal o vertical de acuerdo al anterior objeto agregado.
 * **Espacio entre elementos**: El **BoxLayout** maneja unos elementos especiales para realizar la separación entre elementos siendo:
-    * **RigidArea**: Un elemento que ocupa un espacio con una dimensión y que se encarga de separar los elementos.
+    * **RigidArea**: Un elemento que ocupa un espacio con una dimensión que nosotros le damos y que se encarga de separar los elementos.
     * **HorizontalGlue**: Crea la separación maxima entre elementos de forma horizontal, es util cuando se quiere dos elementos en cada esquina horizontal. 
-    * **RigidArea**: Un elemento que ocupa un espacio con una dimensión y que se encarga de separar los elementos.
     * **VerticalGlue**: Crea la separación maxima entre elementos de forma Vertical, es util cuando se quiere dos elementos en cada esquina Vertical. 
     * **Filler**: Este elemento crea 3 dimensiones por defecto para denotar cual sera la menor distancia, la distancia por defecto y la mayor distancia entre elementos en ambos ejes. Es el mas util para configurar espacios dinámicos a medida que el tamaño de la ventana cambie.
-* **Alineación:** A diferencia de su antecesor los objetos gráficos dentro del panel con el **BoxLayout** pueden alinearse a nuestro antojo ya sea de forma vertical u horizontal. Debemos llamar al objeto **Component** de java y proporcionar la alineación que queremos. Sin embargo esta siempre suele dar problemas.
+* **Alineación:** A diferencia de su antecesor los objetos gráficos dentro del panel con el **BoxLayout** pueden alinearse a nuestro antojo ya sea de forma vertical u horizontal. Esto quiere decir que si por ejemplo estamos posicionando de forma vertical ciertos elementos pero queremos que algunos estén en la parte izquierda, otros en la derecha y otros en el centro, podamos realizar esta alineación. Debemos llamar al objeto **Component** de java y proporcionar la alineación que queremos. Sin embargo esta siempre suele dar problemas.
 * **Combinación de Layouts**: Por supuesto se puede usar varios **Layouts** para distintos objetos gráficos por ejemplo en este caso la ventana no maneja ningún Layout, mientras que el panel **pContenido** si tiene el **BoxLayout**.
 
 ## GridLayout
@@ -251,16 +252,21 @@ En el anterior ejemplo se representó una sopa de letras con ayuda de un **GridB
 
 El uso de este Layout aunque nos da varias posibilidades para posicionar en ambas dimensiones tiene ciertas desventajas:
 * **Mismo tamaño de elementos:** Cuando usamos **GridLayout** los elementos dentro de este van a ocupar todos el mismo tamaño, no es posible cambiar e tamaño de un solo elemento dentro del Grid.
-* **Ocupación:** Cada elemento estrictamente ocupará una celda dentro del Grid, si quisiéramos que un elemento ocupe toda una fila o columna. Tampoco podemos hacer que un objeto ocupe dos o mas celdas.
+* **Ocupación:** Cada elemento estrictamente ocupará una celda dentro del Grid, si quisiéramos que un elemento ocupe toda una fila o columna esto no será posible. Tampoco podemos hacer que un objeto ocupe dos o mas celdas.
 
 ## GridBadLayout
 
 Este **LayoutManager** es el mas sofisticado y pretende cubrir todas las falencias de los demás Layouts, para empezar con este podemos posicionar elementos en ambas dimensiones (de forma vertical y horizontal), podemos realizar ademas una serie de configuraciones como:
 * Establecer posición de un elemento dentro del grid de forma individual.
-* Establecer el el espaciado entre objetos de forma individual y hacia cualquier dirección.
-* Establecer cuantas celdas puede ocupar un elemento.
-* Establecer la posición interna dentro de su celda.
-* Establecer cuantas columnas tiene una fila por separado.
+* Establecer cuantas celdas puede ocupar un elemento o dar su propio espacio destinado dentro del Grid.
+* Establecer si un elemento va a ocupar todo el espacio dentro de su espacio destinado.
+* Establecer la posición interna dentro de su espacio destinado.
+* Establecer el el espaciado entre objetos de forma individual y hacia cualquier dirección también conocido como margin.
+* Establecer el el espaciado interno de cada objeto de forma individual también conocido como padding.
+* Establecer si una fila o columna va a tener mayor tamaño que las demás.
+* Crear filas y columnas de formas dinámicas, no es necesario establecer un tamaño fijo del Grid
+
+Estas características serán explicadas una a una mas adelante en esta sesión.
 
 Esto da muchas posibilidades para crear interfaces como nosotros queremos y con distintas formas que con los anteriores Layout no es posible. En la siguiente sección vamos a implementar este **LayoutManager** en nuestro proyecto asi que no vamos a mostrar un pequeño ejemplo. Pero antes vamos a construir rápidamente los preparativos para usar nuestro **GridBadLayout**.
 

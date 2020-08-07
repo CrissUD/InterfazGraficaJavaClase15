@@ -294,7 +294,7 @@ Podemos observar mediante este archivo plano que un curso se compone de:
 * **Puntuación de Curso**.
 * **Dirección imágen de Curso**.
 
-Ahora crearemos una **Clase Modelo** que encapsule toda esta información y de esta forma pode manejar los datos a traves de objetos:
+Ahora crearemos una **Clase Modelo** que encapsule toda esta información y de esta forma poder manejar los datos a traves de objetos:
 <div align='center'>
     <img  src='https://i.imgur.com/LdNgIOR.png'>
     <p>Clase modelo que representa un producto</p>
@@ -472,7 +472,7 @@ public Producto devolverProducto(int posicion){
 }
 ```
 
-Ya tenemos todo listo en cuanto a la gestión de la información externa, ahora vamos a utilizar nuestro componente **Productos** pero antes de esto vamos a tener que realizar una **Reutilización de componentes** y para esto crearemos otro componente al cual llamaremos **Producto** y este se encargará de encapsular la estructura básica de cada producto, por ahora solo vamos a crearlo y a realizar su código básico:
+Ya tenemos todo listo en cuanto a la gestión de la información externa, ahora podemos concentrarnos en el componente **Productos**. Dentro de este componente vamos a realizar una **Reutilización de componentes** y para esto crearemos otro componente al cual llamaremos **Producto** y este se encargará de encapsular la estructura básica de cada uno de los cursos, por ahora solo vamos a crearlo y a realizar su código básico:
 <div align='center'>
     <img  src='https://i.imgur.com/qi1SveA.png'>
     <p>Creación del componente producto</p>

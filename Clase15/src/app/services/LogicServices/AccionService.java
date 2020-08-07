@@ -1,4 +1,4 @@
-package app.services.LogicServices;
+package app.services.logicServices;
 
 import javax.swing.ImageIcon;
 

@@ -8,7 +8,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.Timer;
 
-import app.services.LogicServices.AccionService;
+import app.services.logicServices.AccionService;
 
 public class InicioComponent implements ActionListener {
 

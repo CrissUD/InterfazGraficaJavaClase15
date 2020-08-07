@@ -55,7 +55,7 @@ public class VistaPrincipalTemplate extends JFrame {
             7, 10, sRecursos.getColorGrisClaro(), sRecursos.getColorAzul(), sRecursos.getColorAzulOscuro())
         );
         this.pPrincipal.add(psProductos);
-        this.psProductos.getVerticalScrollBar().setValue(2);
+        this.psProductos.revalidate();
     }
 
     public JPanel getPNavegacion() {

@@ -266,7 +266,7 @@ Este **LayoutManager** es el mas sofisticado y pretende cubrir todas las falenci
 * Establecer si una fila o columna va a tener mayor tamaño que las demás.
 * Crear filas y columnas de formas dinámicas, no es necesario establecer un tamaño fijo del Grid
 
-Estas características serán explicadas una a una mas adelante en esta sesión.
+Estas características serán explicadas una a una mas adelante en esta sesión. Otra característica es que si el **GridBagLayout** solo mantiene un objeto, independientemente de las configuraciónes dadas con las restricciones, colocará ese único elemento en el centro tanto de forma horizontal como vertical.
 
 Esto da muchas posibilidades para crear interfaces como nosotros queremos y con distintas formas que con los anteriores Layout no es posible. En la siguiente sección vamos a implementar este **LayoutManager** en nuestro proyecto asi que no vamos a mostrar un pequeño ejemplo. Pero antes vamos a construir rápidamente los preparativos para usar nuestro **GridBadLayout**.
 
@@ -521,6 +521,34 @@ public ProductoTemplate(ProductoComponent productoComponent){
 }
 ```
 
+Para acabar y como sabemos que este componente se usara de forma recursiva vamos a pedir por parámetro esta vez un objeto tipo **Producto** para poder obtener la información de cada uno de ellos:
+
+* **Clase ProductoComponent:**
+```javascript
+public ProductoComponent(Producto producto){
+    productoTemplate = new ProductoTemplate(this, producto);
+}
+```
+
+* **Clase ProductoTemplate:**
+```javascript
+public ProductoTemplate(ProductoComponent productoComponent, Producto producto){
+    ...
+    ...
+}
+```
+
+Dentro de la case **ProductoTemplate** vamos a igualar el parámetro recibido con un atributo que declaremos global ya que es probable que lo necesitemos en otras partes distintas al constructor:
+```javascript
+private Producto producto;
+
+public ProductoTemplate(ProductoComponent productoComponent, Producto producto){
+    this.producto = producto;
+    ...
+    ...
+}
+```
+
 Con esto estamos listos para empezar a construir nuestros componentes a traves del **GridBagLayout**, en la siguiente sección vamos a ver a profundidad como utilizar este **LayoutManager** al tempo que vamos construyendo nuestro componente gráfico.
 
 # Implementación de GridBadLayout
@@ -550,10 +578,11 @@ public Producto devolverProducto(int posicion){
 }
 ```
 
-Ahora nos concentraremos en la clase **ProductosTemplate**, primero vamos a realizar dos cosas importantes en las configuraciones generales del componente, vamos a cambiar el color de fondo por un gris claro y vamos a retirar la configuración que dejaba nulo el **LayoutManager**:
+Ahora nos concentraremos en la clase **ProductosTemplate**, primero vamos a realizar tres cosas importantes en las configuraciones generales del componente, vamos a cambiar el color de fondo por un gris claro, vamos a retirar la configuración que dejaba nulo el **LayoutManager** y también borraremos la configuración del tamaño del componente:
 ```javascript
 this.setBackground(sRecursos.getColorGrisClaro());
-**this.setLayout(null);*** // Se borra esta linea
+***this.setLayout(null);*** // Se borra esta linea
+***this.setSize(850, 600);*** // Se borra esta linea
 ```
 
 Vamos a llamar a los servicios gráficos necesarios para ayudarnos con la creación de objetos gráficos:
@@ -587,15 +616,21 @@ lGrid = new GridBagLayout();
 gbc = new GridBagConstraints();
 ```
 
-Antes de siquiera crear algún elemento en nuestro componente, conviene explicar de que se tratan cada una de estas restricciones que le indicaran al **GridBagLayout** como estarán posicionado nuestros elementos.
+Ya teniendo listo el Layout, podemos establecer este **LayoutManager** en nuestro componente:
+```javascript
+// Dentro del constructor
+this.setLayout(lGrid);
+```
+
+Antes de siquiera crear algún elemento en nuestro componente, conviene explicar de que se tratan cada una de estas restricciones que le indicarán al **GridBagLayout** como estarán posicionado nuestros elementos.
 
 ## Restricciones 
 
 ### **Posición de objeto dentro del Grid**:
 
-Recordemos que un GridBagLayout crea una matriz imaginaria donde nosotros vamos a posicionar nuestros elementos de forma vertical u horizontal. Bien ps debemos siempre indicar en que fila y columna dentro del grid va comenzar algún elemento, esto lo haremos configurando el objeto **GridBagConstraints** y usando los atributos **gridx y gridy**.
+Recordemos que un GridBagLayout crea una matriz imaginaria donde nosotros vamos a posicionar nuestros elementos de forma vertical y horizontal. Bien pues debemos siempre indicar en que fila y columna dentro del grid va comenzar algún elemento, esto lo haremos configurando el objeto **GridBagConstraints** y usando los atributos **gridx y gridy**.
 
-La fila y columna inicial es la numero 0.
+La fila y columna inicial es la numero 0 y este es el numero por defecto si no se configura el elemento, pero es recomendable siempre configurar este aspecto.
 
 * **Ejemplo:**
 
@@ -604,10 +639,15 @@ Aquí estamos indicando que un elemento se posicionará en la fila 0 y columna 0
 gbc.gridx = 0;
 gbc.gridy = 0;
 ```
+Aquí estamos indicando que un elemento se posicionará en la fila 3 y columna 2 dentro del **GridBagLayout**.
+```javascript
+gbc.gridx = 2;
+gbc.gridy = 3;
+```
 
 ### **Espacio destinado**:
 
-Como habíamos mencionado en la descripción de este **LayoutManager** a diferencia de un **GridLayout** en este Layout si tenemos la posibilidad de indicar si vamos a destinar mas de una celda en nuestra matriz o grid para un elemento en especifico. Para este caso podemos usar los atributos: 
+Como habíamos mencionado en la descripción de este **LayoutManager**, a diferencia de un **GridLayout** en este si tenemos la posibilidad de indicar si vamos a destinar mas de una celda en nuestra matriz o grid para un elemento en especifico. Para este caso podemos usar los atributos: 
 * **gridwidth**: que nos indicará cuantas columnas van a estar destinadas para nuestro elemento dentro del Grid.
 * **gridheight**: que nos indicará cuantas filas van a estar destinadas para nuestro elemento dentro del Grid.
 
@@ -715,11 +755,10 @@ En el siguiente ejemplo un elemento tiene un padding de 5px para el eje x y un p
 gbc.ipadx = 5;
 gbc.ipady = 10;
 ```
----
 
 ### **Estiramiento de filas o columnas**
 
-Por defecto el grid que vamos a ir construyendo hará que todas las filas y columnas ocupen el ancho y alto de acuerdo al elemento que tenga mas altos valores en sus dimensiones, pero quizás pueden haber casos en los que queremos que una fila en especifico ocupe un ancho mayor al resto o quizás una columna para estos casos podemos usar los atributos: **weightx** para estirar una columna, o **weighty** para estirar una fila.
+Por defecto el grid que vamos a ir construyendo hará que todas las filas y columnas ocupen el ancho y alto de acuerdo al elemento que tenga mas altos valores en sus dimensiones, pero quizás pueden haber casos en los que queremos que una fila en especifico ocupe un ancho mayor al resto o quizás una columna, para estos casos podemos usar los atributos: **weightx** para estirar una columna, o **weighty** para estirar una fila.
 
 Por defecto el valor de estiramiento es de 0, para indicar que una fila será estirada se debe colocar el valor de 1. El estiramiento se realizara hasta lo permitido respecto a cuantos mas elementos habrá en el grid.
 
@@ -733,7 +772,7 @@ gbc.weighty = 0;
 
 ## Ajustando nuestra Ventana Principal
 
-Como vamos a mostrar varios productos en nuestra ventana, es muy probable que estos ocupen mas dimensiones que tiene la ventana, es por esto que debemos realizar un método para poder navegar dentro de esta ventana, para eso vamos a utilizar un **JScrollPane** el cual nos brinda **JScrollBar** para que el usuario pueda navegar dentro de una ventana de dimensiones fijas como es nuestro caso. 
+Como vamos a mostrar varios productos en nuestra ventana, es muy probable que estos ocupen mas dimensiones que tiene la ventana, es por esto que debemos hallar una forma para poder navegar dentro de esta ventana, para eso vamos a utilizar un **JScrollPane** el cual nos brinda **JScrollBars** para que el usuario pueda navegar dentro de una ventana de dimensiones fijas como es nuestro caso. 
 
 Vamos a ir a nuestra clase **VentanaPrincipalTemplate**, allí lo primero que vamos a hacer es declarar un objeto tipo **JScrollPane**:
 ```javascript
@@ -775,7 +814,7 @@ public void crearContenidoProductos(JPanel pProductos){
 }
 ```
 
-Finalmente y esto se hace para que el contenido del ScrollPane se vea sin problemas, muchas veces mostrar contenido dentro de un ScrollPane puede generar problemas de visualización asi que vamos a hacer una actualización de este, para eso vamos a mover el scroll automáticamente dos pixeles hacia abajo, y esto pasa ya que al activar el ScrollBar el sistema operativo obliga a nuestra, que pinte de nuevo el contenido y pueda ser visible.
+Finalmente y esto se hace para que el contenido del ScrollPane se vea sin problemas, ya que muchas veces mostrar contenido dentro de un ScrollPane puede generar problemas de visualización, vamos a usar el método **revalidate** que actualiza todo el contenido que este dentro del ScrollPane, si por ejemplo usáramos el método **repaint** no funcionaría y no se verían los elementos hasta hacer scroll con el mouse.
 
 ```javascript
 public void crearContenidoProductos(JPanel pProductos){
@@ -784,11 +823,11 @@ public void crearContenidoProductos(JPanel pProductos){
         7, 10, sRecursos.getColorGrisClaro(), sRecursos.getColorAzul(), sRecursos.getColorAzulOscuro())
     );
     this.pPrincipal.add(psProductos);
-    this.psProductos.getVerticalScrollBar().setValue(2);
+    this.psProductos.revalidate();
 }
 ```
 
-Nuestro método esta listo, pero no lo hemos llamado, ¿Donde llamaremos a este método?, justo en el codigo que reacciona cuando el usuario oprime click en el botón de la navegación **Productos**, recordemos esa configuración esta dentro de la clase **VistaPrincipalComponent**, lo único que debemos hacer es cambiar la agregación directa del componente **Productos** al panel principal, por el paso al método que creamos:
+Nuestro método esta listo, pero no lo hemos llamado, ¿Donde llamaremos a este método?, justo en el código que reacciona cuando el usuario oprime click en el botón de la navegación **Productos**, recordemos esa configuración esta dentro de la clase **VistaPrincipalComponent**, lo único que debemos hacer es cambiar la agregación directa del componente **Productos** al panel principal, por el paso al método que creamos:
 
 <div align='center'>
     <img  src='https://i.imgur.com/YvSnaYJ.png'>
@@ -800,14 +839,14 @@ Nuestro método esta listo, pero no lo hemos llamado, ¿Donde llamaremos a este 
 
 Siempre es bueno que antes de empezar a crear elementos y posicionarlos, hagamos un esquema general de como se van a distribuir los elementos dentro del GridBagLayout, a continuación mostramos el esquema de como se quiere construir el componente **Productos**:
 <div align='center'>
-    <img  src='https://i.imgur.com/mxWcfSB.png'>
+    <img  src='https://i.imgur.com/iJdrmFK.png'>
     <p>Esquema de distribución dentro del Grid</p>
 </div>
 
 En este caso podemos ver las siguientes particularidades:
 * La primera fila va a ocupar 3 columnas.
 * Las demás filas estarán divididas en 3 columnas.
-* No se aprecia en la imágen pero pueden haber muchas filas, dependiendo del numero de productos que coloquemos, mierras que el numero máximo de columnas va a ser siempre 3.
+* No se aprecia en la imágen pero pueden haber muchas filas, dependiendo del numero de productos que coloquemos, mientras que el numero máximo de columnas va a ser siempre 3.
 
 Vamos a crear nuestro primer elemento dentro de nuestro componente y a posicionarlo mediante las restricciones que acabamos de ver, en este caso queremos dar un titulo principal que nos indique que los productos mostrados serán cursos en linea, como será un único JLabel vamos a crearlo dentro del constructor:
 
@@ -825,7 +864,7 @@ lTitulo = sObjGraficos.construirJLabel(
 lTitulo.setBorder(sRecursos.getBorderInferiorAzul());
 ```
 
-Noten que dentro de la creación de nuestro JLabel hemos dado una posición y tamaño de 0 ya que la posición por pixeles queda de lado y será el **GridBagLayout** se encargará de esto. Ahora, para configurar como se va a posicionar.
+Noten que dentro de la creación de nuestro JLabel hemos dado una posición y tamaño de 0 ya que la posición por pixeles queda de lado y será el **GridBagLayout** se encargará de esto.
 
 Ahora vamos a configurar las restricciones para posicionar nuestro elemento, no es necesario configurar todas las restricciones, solo las necesarias. Para empezar como nuestro titulo estará en la parte superior debemos indicar que nuestro titulo va a posicionarse en la columna y fila 0:
 ```javascript
@@ -855,7 +894,7 @@ gbc.insets.left = 15;
 gbc.insets.right = 15;
 ```
 
-Ahora como en esquema podemos darnos cuenta, la primera fila va a ocupar 3 columnas asi que debemos indicar esto a nuestras restricciones:
+Ahora basándonos en el esquema podemos darnos cuenta, la primera fila va a ocupar 3 columnas asi que debemos indicar esto a nuestras restricciones:
 ```javascript
 // Dentro del constructor
 lTitulo = sObjGraficos.construirJLabel(
@@ -890,7 +929,7 @@ gbc.insets.right = 15;
 gbc.gridwidth = 3;
 gbc.fill = GridBagConstraints.HORIZONTAL;
 ```
-Ya terminamos con todas las restricciones, ahora le debemos indicar al **GridBagLayout** que tendrá las restricciones actuales ese elemento, esto con el método **setConstraints** que recibe como parámetros:
+Ya terminamos con todas las restricciones, ahora le debemos indicar al **GridBagLayout** que el elemento actual (JLabel) ,tendrá las restricciones actuales, esto con el método **setConstraints** que recibe como parámetros:
 * **El objeto gráfico que se añadirá**.
 * **El objeto de configuración de restricciones.**
 ```javascript
@@ -918,15 +957,17 @@ this.add(lTitulo);
     <p></p>
 </div>
 
-***Nota2:** Debemos tener cuidado con las restricciones que vamos configurando ya que estas quedan así a menos que se vuelan a cambiar, por ejemplo ya indicamos que el titulo ocupará 3 columnas, pero esto no será asi para los demás elementos que coloquemos así que debemos modificarlo de nuevo para cambiar su valor. Debemos tener cuidado de volver a configurar las restricciones o puede que por alguna de estas que no se haya actualizado todo nuestro esquema quede mal.*
+***Nota2:** Debemos tener cuidado con las restricciones que vamos configurando ya que estas quedan así a menos que se vuelan a cambiar, por ejemplo ya indicamos que el titulo ocupará 3 columnas, pero esto no será asi para los demás elementos que coloquemos así que debemos modificarlo de nuevo para cambiar su valor. Debemos tener cuidado de volver a configurar las restricciones o puede que por alguna de estas que no se haya actualizado y como consecuencia todo nuestro esquema quede mal.*
 
-Es hora de llamar a nuestros productos, para esto vamos a crear un método llamado **crearProductos**:
+Es hora de crear a los productos, para esto vamos a crear un método llamado **crearProductos**:
 ```javascript
 public void crearProductos(){
 }
 ```
 
 Lo primero que haremos es declarar dos variables enteras que nos ayudaran para el posicionamiento de nuestros productos y ademas para obtenerlos:
+* **numProducto:** Nos servirá para consultar los productos desde el ArrayList y ademas para cuestiones de posicionamiento con las columnas.
+* **fila**: Nos servirá para ubicar los productos en la fila correspondiente y empieza en 1 por que la fila 0 ya la ocupa el Label del titulo.
 ```javascript
 public void crearProductos(){
     int numProducto = 0, fila = 1;
@@ -941,9 +982,9 @@ public void crearProductos(){
 }
 ```
 
-El paso siguiente es muy importante y es que como indicamos hay restricciones que ya se configuraron para colocar el titulo pero alguna de estas no las queremos asi que debemos volver a colocarlas en su valor por defecto, en este caso para cada producto no queremos:
-* Que cada panel de un producto se estire en el eje horizontal.
-* Que cada producto ocupe 3 columnas, solo queremos que ocupe 1.
+El paso siguiente es muy importante y es que como indicamos hay restricciones que ya se configuraron para colocar el titulo pero alguna de estas no las queremos asi que debemos volver a colocarlas en su valor por defecto, en este caso para cada producto **NO** queremos:
+* Que cada panel de un producto se estire en el eje horizontal, queremos que ocupe su tamaño justo.
+* Que cada producto ocupe tres columnas, solo queremos que ocupe una columna.
 * Que tenga un margin a la derecha de 15, si queremos un margin de 15 para los demás lados pero para la derecha no será necesario.
 ```javascript
 public void crearProductos(){
@@ -983,7 +1024,7 @@ public void crearProductos(){
 }
 ```
 
-Ahora para que el componente hijo **Producto** pueda mostrar la información de cada curso debemos pasarle como argumento los datos de cada curso o para no mandar tantos argumentos podemos directamente pasarle el objeto del producto:
+Ahora para que el componente hijo **Producto** pueda mostrar la información de cada curso debemos pasarle como argumento los datos de cada curso en este caso y con el propósito de no mandar tantos argumentos, el componente hijo nos pide directamente el objeto del producto:
 ```javascript
 public void crearProductos(){
     int numProducto = 0, fila = 1;
@@ -994,33 +1035,6 @@ public void crearProductos(){
     while(producto != null){
         ProductoTemplate pProducto = new ProductoComponent(producto).getProductoTemplate();
     }
-}
-```
-
-Esto nos sacará error por que en nuestro componente hijo aun no pedimos nada por parámetro pero es lo que haremos a continuación:
-* **Clase ProductoComponent:**
-```javascript
-public ProductoComponent(Producto producto){
-    productoTemplate = new ProductoTemplate(this, producto);
-}
-```
-
-* **Clase ProductoTemplate:**
-```javascript
-public ProductoTemplate(ProductoComponent productoComponent, Producto producto){
-    ...
-    ...
-}
-```
-
-Dentro de la case **ProductoTemplate** vamos a igualar el parámetro recibido con un atributo que declaremos global ya que es probable que lo necesitemos en otras partes distintas al constructor:
-```javascript
-private Producto producto;
-
-public ProductoTemplate(ProductoComponent productoComponent, Producto producto){
-    this.producto = producto;
-    ...
-    ...
 }
 ```
 
@@ -1110,6 +1124,7 @@ public void crearProductos(){
 
 Finalmente y para que mas adelante podamos ver la estructura, debemos llamar el método dentro del constructor:
 ```javascript
+// Dentro del constructor
 this.crearProductos();
 ```
 
@@ -1188,7 +1203,7 @@ public void crearJLabels(){
 }
 ```
 
-Ahora como sera una cantidad considerable de labels los que vamos a crear, es probable que modificar algunas restricciones y luego tener encuentra cuales deben ser modificadas para el siguiente objeto será una tarea tediosa y ademas puede que ocupe bastantes lineas de código, podría ser una mejor solución si creamos un método que se encargue de la actualización de cada una de las restricciones por objeto y de esta forma no solo nos ahorramos lineas de código, también nos aseguramos de actualizar cada restricción y asi no tener problemas de posicionamiento en el futuro:
+Como sera una cantidad considerable de labels los que vamos a crear, es probable que modificar algunas restricciones y luego tener encuentra cuales deben ser modificadas para el siguiente objeto será una tarea tediosa y ademas puede que ocupe bastantes lineas de código, podría ser una mejor solución si creamos un método que se encargue de la actualización de cada una de las restricciones por objeto y de esta forma no solo nos ahorramos lineas de código, también nos aseguramos de actualizar cada restricción y asi no tener problemas de posicionamiento en el futuro:
 
 ```javascript
 public void modificarGbc(
@@ -1239,7 +1254,7 @@ public void crearJLabels(){
 
 ***Nota:** Noten que podemos agregar un elemento directamente con sus respectivas configuraciones **GridBagConstraints** pero para que esto funcione nuestro componente debe ya tener configurado el **LayoutManager**, esto quiere decir que la linea de código **setLayoutManager(lGrid)**, debe estar antes de llamar este método (crearLabels) o de lo contrario no funcionara, en cambio cuando usamos el otro enfoque (como lo hicimos en la clase **ProductosTemplate**) no es necesario que la configuración del layout esté antes de la configuración de las posiciones de los elementos, esa es la diferencia de por que en la clase **ProductosTemplate** esta al final mientras que en la clase **ProductoTemplate** esta al comienzo.*
 
-Ahora para el caso del titulo estamos diciendo:
+Ahora para el caso del titulo estamos diciendo que el objeto gráfico:
 * Va a posicionarse en la columna y fila 0 (la primera en cada caso).
 * Va a ocupar 3 columnas y 1 fila.
 * No se va a estirar el objeto (se deja valor en defecto 0).
@@ -1259,7 +1274,7 @@ modificarGbc(0, 1, 3, 1, 2, 10, 10, 3, 10, 3, 0, 0, 0, 0);
 this.add(lImagen, gbc);
 ```
 
-Para este caso debemos tener en cuenta que la resolución de la imágen y esta es la que dará el tamaño al label, en cuanto a sus restricciones tenemos:
+Para este caso debemos tener en cuenta que la resolución de la imágen y esta es la que dará el tamaño al label, en cuanto a sus restricciones tenemos que el Label:
 * Va a posicionarse en la columna 0 y en la fila 1.
 * Va a ocupar 3 columnas y 1 fila.
 * Se va a estirar la imagen de forma horizontal asi que se deja un numero 2.
@@ -1280,7 +1295,7 @@ modificarGbc(0, 2, 3, 1, 2, 10, 10, 15, 10, 15, 0, 0, 0, 0);
 this.add(lParrafo, gbc);
 ```
 
-Para este caso en cuanto a sus restricciones tenemos:
+Para este caso en cuanto a sus restricciones tenemos que el objeto gráfico:
 * Va a posicionarse en la columna 0 y en la fila 2.
 * Va a ocupar 3 columnas y 1 fila.
 * Se va a estirar el párrafo de forma horizontal asi que se deja un numero 2.
@@ -1299,7 +1314,7 @@ modificarGbc(0, 3, 1, 1, 0, 10, 10, 5, 15, 5, 10, 10, 0, 0);
 this.add(lCampo, gbc);
 ```
 
-Para este caso en cuanto a sus restricciones tenemos:
+Para este caso en cuanto a sus restricciones tenemos que el objeto gráfico:
 * Va a posicionarse en la columna 0 y en la fila 3.
 * Va a ocupar 1 columna y 1 fila.
 * No se quiere estirar el objeto (se deja valor por defecto 0).
@@ -1319,7 +1334,7 @@ modificarGbc(1, 3, 1, 1, 0, 13, 10, 5, 15, 5, 0, 0, 1, 0);
 this.add(lEstrella, gbc);
 ```
 
-Para este caso ejemplificamos primero la imágen para obtenerla y luego si la redimensionamos, en cuanto a las restricciones tenemos:
+Para este caso ejemplificamos primero la imágen para obtenerla y luego si la redimensionamos, en cuanto a las restricciones tenemos que el objeto gráfico:
 
 * Va a posicionarse en la columna 1 y en la fila 3.
 * Va a ocupar 1 columna y 1 fila.
@@ -1340,7 +1355,7 @@ modificarGbc(2, 3, 1, 1, 0, 16, 10, 10, 15, 0, 0, 0, 0, 0);
 this.add(lPuntuacion, gbc);
 ```
 
-Para este caso en cuanto a sus restricciones tenemos:
+Para este caso en cuanto a sus restricciones tenemos que el Label:
 * Va a posicionarse en la columna 2 y en la fila 3.
 * Va a ocupar 1 columna y 1 fila.
 * No se quiere estirar el objeto (se deja valor por defecto 0).
